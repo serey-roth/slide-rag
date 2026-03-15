@@ -21,7 +21,7 @@ import bm25s
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-from config import CHROMA_DIR, EMBEDDING_MODEL, BM25_DIR
+from src.config import CHROMA_DIR, EMBEDDING_MODEL, BM25_DIR
 
 # ---------------------------------------------------------------------------
 # Load indices (done once at module level so CLI reuse is fast)
@@ -139,7 +139,8 @@ def build_context(slides: list[dict]) -> str:
         prev_text = meta.get("prev_slide_text", "")
         next_text = meta.get("next_slide_text", "")
 
-        parts = [f"[Slide {slide_num}]"]
+        deck_name = meta.get("deck_name", "")
+        parts = [f"[{deck_name}, Slide {slide_num}]" if deck_name else f"[Slide {slide_num}]"]
         if title:
             parts.append(f"Title: {title}")
         parts.append(f"Content: {slide['document']}")
@@ -153,6 +154,7 @@ def build_context(slides: list[dict]) -> str:
     return "\n\n---\n\n".join(blocks)
 
 
+# TODO: Add topK to param
 def retrieve(query: str, deck_filter: str | list[str] | None = None) -> list[dict]:
     """
     Run hybrid retrieval for a query and return the top-N slide dicts.

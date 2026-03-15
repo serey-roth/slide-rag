@@ -19,5 +19,4 @@ logs/
 # macOS
 .DS_Store
 
-# dev notes
-PRD/*.md
+*.egg-info
