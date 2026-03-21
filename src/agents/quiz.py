@@ -11,9 +11,10 @@ _anthropic = anthropic.Anthropic()
 QUIZ_GENERATION_MODEL = 'claude-haiku-4-5'
 DEFAULT_NUM_QUESTIONS = 5
 
-QUIZ_GENERATION_PROMPT="""
-You are a quiz maker helping a student learn a topic from lecture slides.
-Given a topic and slide content, generate {n} multiple-choice questions grounded in the slides.
+QUIZ_GENERATION_PROMPT = """
+You are a quiz maker helping a student learn a topic from lecture slide images.
+Given a topic and slide images, generate {n} multiple-choice questions grounded in what you see in the slides.
+Read each slide carefully, including diagrams, equations, code, and figures.
 
 Respond in EXACTLY this format with no extra text, no markdown, no bold.
 Separate each question with ---:
@@ -77,7 +78,7 @@ def _parse_question(block: str) -> Question | None:
 
 
 def generate_quiz(topic: str, deck_filter: str | list[str] | None, n: int = DEFAULT_NUM_QUESTIONS) -> Quiz:
-    slides = retrieve(topic, deck_filter)
+    slides = retrieve(queries=[topic], deck_filter=deck_filter)
     context = build_context(slides)
 
     response = _anthropic.messages.create(
@@ -86,7 +87,7 @@ def generate_quiz(topic: str, deck_filter: str | list[str] | None, n: int = DEFA
         max_tokens=512 * n,
         messages=[{
             "role": "user",
-            "content": f"Relevant slides:\n\n{context}\n\nTopic: {topic}",
+            "content": context + [{"type": "text", "text": f"Topic: {topic}"}],
         }],
     )
 
