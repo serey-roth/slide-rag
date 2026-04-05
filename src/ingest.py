@@ -10,7 +10,10 @@ load_dotenv()
 
 from pdf2image import convert_from_path
 import torch
-from src.model import load_model
+
+from src.llm import load_colpali_model
+from src.agents.comprehension import comprehend
+from src.learner_model import LearnerModel
 
 
 def _load_images(folder: Path) -> list:
@@ -106,16 +109,10 @@ def ingest(pdf_path: str, force: bool = False) -> None:
 
     images, images_dir = convert_pdf_to_images(pdf_path, force=force)
 
-    model, processor = load_model()
+    model, processor = load_colpali_model()
 
     embed_slides(deck_name, images, images_dir, model, processor, force=force)
 
     print(f"[ingest] Done — {deck_name}")
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ingest a PDF slide deck using ColPali visual embeddings.")
-    parser.add_argument("pdf_path", help="Path to the PDF file")
-    parser.add_argument("--force", action="store_true", help="Clear and rebuild cached images and embeddings")
-    args = parser.parse_args()
-    ingest(args.pdf_path, force=args.force)
+    comprehend(deck_name, LearnerModel())
