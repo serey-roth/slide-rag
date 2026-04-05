@@ -8,6 +8,7 @@ bm25_index/
 data/images/
 data/indexes/
 data/decks/
+data/*.json
 
 # Secrets
 .env
