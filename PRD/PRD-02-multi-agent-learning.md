@@ -6,9 +6,15 @@
 
 ---
 
-## Problem
+## Motivation
 
 V1 answered questions from slides passively. A student who only asks questions learns less than one who is also tested. Retrieval alone is not learning — it's search. V2 adds active learning: the system tests you, evaluates your answers, and explains what you got wrong.
+
+---
+
+## Problem
+
+V1 had no way to assess understanding. A student could read answers indefinitely without knowing whether they actually understood the material. There was also no way to ask a follow-up question after a wrong answer without losing quiz context.
 
 ---
 
@@ -36,7 +42,7 @@ V1 answered questions from slides passively. A student who only asks questions l
 ## User Stories
 
 | # | As a student, I want to... | So that... |
-|---|---|---|
+| --- | --- | --- |
 | 1 | Ask a question and get a cited answer | I understand a concept without searching manually |
 | 2 | Request a quiz on a topic | I'm tested on what I need to study |
 | 3 | Get questions grounded in actual slide content | Questions are relevant, not generic |
@@ -49,6 +55,7 @@ V1 answered questions from slides passively. A student who only asks questions l
 ## Scope
 
 **In:**
+
 - Orchestrator that classifies user intent (Q&A, quiz, quit)
 - Q&A agent — retrieval + streaming answer + citations
 - Quiz agent — batch question generation + interactive loop + score
@@ -57,6 +64,7 @@ V1 answered questions from slides passively. A student who only asks questions l
 - Context-aware intent classification using recent user queries
 
 **Out:**
+
 - Image/formula support
 - Quiz session persistence
 - Learner model or weak-area tracking
@@ -68,7 +76,7 @@ V1 answered questions from slides passively. A student who only asks questions l
 ## Key Risks
 
 | Risk | Mitigation |
-|---|---|
+| --- | --- |
 | Quiz questions are off-topic or hallucinated | Retrieval-grounded generation; strict format prompt |
 | Intent misclassified (quiz vs Q&A) | Recent query history passed to orchestrator for context resolution |
 | No visual content in questions | Accepted V2 limitation — text-only slides only |

@@ -5,7 +5,7 @@ import numpy as np
 
 import torch
 
-from src.model import load_model
+from src.llm import load_colpali_model
 
 INDEX_DIR = "data/indexes"
 
@@ -70,20 +70,7 @@ def build_context(slides: list[dict]) -> list[dict]:
 
 
 def retrieve(queries: list[str], deck_filter: list[str] | None = None, top_k: int = 5) -> list:
-    model, processor = load_model()
+    model, processor = load_colpali_model()
     query_embeddings = embed_queries(queries, model, processor)
     all_embeddings, all_metadata = load_index(deck_filter, model.device)
     return rank(query_embeddings, all_embeddings, all_metadata, processor, top_k)
-
-
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="Retrieve slides using ColPali visual embeddings.")
-    parser.add_argument("queries", nargs="+", help="One or more search queries")
-    parser.add_argument("--decks", nargs="+", help="Filter to specific deck names", default=None)
-    parser.add_argument("--top-k", type=int, default=5, help="Number of results to return")
-    args = parser.parse_args()
-
-    results = retrieve(args.queries, deck_filter=args.decks, top_k=args.top_k)
-    for r in results:
-        print(f"[{r['score']:.3f}] {r['deck']} — slide {r['slide_num']} ({r['image_path']})")

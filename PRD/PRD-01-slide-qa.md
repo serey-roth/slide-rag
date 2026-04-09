@@ -6,11 +6,15 @@
 
 ---
 
+## Motivation
+
+University slide decks are dense and semantically incomplete by design — they assume a lecturer is filling in the gaps live. There is no way to ask a natural language question and get a grounded, cited answer from the slides themselves. V1 is the smallest useful thing: make the slides queryable.
+
+---
+
 ## Problem
 
-University slide decks are dense and semantically incomplete by design — they assume a lecturer is filling in the gaps live. Studying from them is slow and fragmented. There is no way to ask a natural language question and get a grounded, cited answer from the slides themselves.
-
-Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not tuned for deep Q&A, and do not address the core problem: **slides are compressed speech, not self-contained documents**.
+Studying from slide decks is slow and fragmented. Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not tuned for deep Q&A, and do not address the core problem: **slides are compressed speech, not self-contained documents**.
 
 ---
 
@@ -37,7 +41,7 @@ Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not 
 ## User Stories
 
 | # | As a student, I want to... | So that... |
-|---|---|---|
+| --- | --- | --- |
 | 1 | Ask a question in natural language | I get a direct answer without manually searching slides |
 | 2 | See which slide(s) the answer came from | I can verify and read the original context |
 | 3 | Get a clear explanation even when the slide is sparse | I understand the concept, not just the bullet |
@@ -49,6 +53,7 @@ Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not 
 ## Scope
 
 **In:**
+
 - Natural language Q&A over PDF slide decks
 - Hybrid retrieval (semantic + keyword) with cited answers
 - Sparse slide handling — LLM supplements incomplete slides inline
@@ -56,6 +61,7 @@ Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not 
 - Single deck or multi-deck selection at session start
 
 **Out:**
+
 - Images, formulas, OCR
 - Quiz / testing mode
 - Session persistence across runs
@@ -67,7 +73,7 @@ Existing tools (SlideSpeak, StudyFetch, Microsoft Copilot) are black boxes, not 
 ## Key Risks
 
 | Risk | Mitigation |
-|---|---|
+| --- | --- |
 | Sparse slides produce low-quality answers | LLM supplements gaps inline; prompt constrains it to not fabricate |
 | Retrieval misses the right slide | Sliding window adds adjacent slides as context |
 | Missing visual content (diagrams, math) | Accepted V1 limitation |
